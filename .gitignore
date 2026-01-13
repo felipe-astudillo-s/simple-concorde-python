@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.sol
+*.tsp
+*.mas
+*.pul
+*.sav
+*.res
+concorde
+concorde-linux
+qsopt
+qsopt.a
+qsopt.linux.a
