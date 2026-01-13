@@ -81,6 +81,37 @@ if sol_path:
     tour = solver.read_solution(sol_path)
     print(f"Optimal Visit Order: {tour}")
 ```
+## 🧠 Deep Dive: How it Works
+
+To make this solver easy to use, we divided the logic into three clear steps. Here is the technical breakdown of the methods in `ConcordeSolver`:
+
+### 1. Data Preparation: `create_tsp_file()`
+Concorde cannot read Python lists directly. This method acts as a **translator**:
+* **Input:** A list of `(x, y)` coordinates.
+* **Process:** It writes a physical `.tsp` file following the **TSPLIB** standard (including headers like `EDGE_WEIGHT_TYPE: EUC_2D`).
+* **Output:** A path to the generated file.
+
+### 2. The Execution Bridge: `run_solver()`
+This is the core of the wrapper. Instead of complex C-bindings, we use Python's `subprocess` module:
+* **Command:** It executes `./concorde <filename>.tsp` as a separate system process.
+* **Stability:** By running it as a subprocess, if the solver hits a memory limit or crashes, your main Python script remains safe.
+* **QSopt Linking:** The binary automatically looks for `qsopt.a` in the root folder to solve the Linear Programming relaxations required for the "Branch and Cut" algorithm.
+
+### 3. Result Parsing: `read_solution()`
+Once Concorde finishes, it leaves a "message" in a `.sol` file.
+* **Parsing:** This method opens the file, skips the header (node count), and converts the raw text into a clean Python `list`.
+* **Zero-indexing:** It automatically handles the conversion from Concorde's internal indexing to Python's 0-based indexing.
+
+
+
+## 📊 Summary Table
+
+| Method | Input | Output | Purpose |
+| :--- | :--- | :--- | :--- |
+| `create_tsp_file` | List of Tuples | `.tsp` file | Translates Python data to TSPLIB format |
+| `run_solver` | `.tsp` file path | `.sol` file path | Triggers the C-binary optimization |
+| `read_solution` | `.sol` file path | List of Integers | Converts raw results back to Python |
+| `cleanup` | Filename base | None | Deletes temporary solver files |
 
 
 ## 📂 Project Structure
