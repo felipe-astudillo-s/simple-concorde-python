@@ -1,4 +1,4 @@
-# Simple Python Concorde Wrapper 🚀
+# Simple Python Concorde Wrapper 
 
 [![Python Version](https://img.shields.io/badge/python-3.6%20%7C%203.8%20%7C%203.10%20%7C%203.12-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
